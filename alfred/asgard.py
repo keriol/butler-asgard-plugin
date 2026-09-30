@@ -8,7 +8,18 @@ from alfred.runtime import AlfredRuntime, build_alfred_runtime
 
 
 class Asgard(Protocol):
-    """Runtime-side Butler boundary consumed by Midgard-facing ingress."""
+    """Butler-owned identity and ingress boundary."""
+
+    @property
+    def butler_name(self) -> str:
+        ...
+
+    @property
+    def available(self) -> bool:
+        ...
+
+    def matches_butler_name(self, requested_name: str) -> bool:
+        ...
 
     def ask(self, message: str) -> dict[str, Any]:
         ...
@@ -16,17 +27,32 @@ class Asgard(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class AlfredAsgard:
-    """Alfred implementation of the minimal Asgard request boundary."""
+    """Alfred-owned Asgard identity and request boundary."""
 
     runtime: AlfredRuntime
+    butler_name: str = "Alfred"
+
+    @property
+    def available(self) -> bool:
+        return True
+
+    def matches_butler_name(self, requested_name: str) -> bool:
+        return (
+            str(requested_name or "").strip().casefold()
+            == self.butler_name.casefold()
+        )
 
     def ask(self, message: str) -> dict[str, Any]:
         with active_butler(self.runtime):
-            return self.runtime.core.ask(message)
+            result = self.runtime.core.ask(message)
+
+        response = dict(result)
+        response["source_butler_name"] = self.butler_name
+        return response
 
 
 def build_alfred_asgard() -> AlfredAsgard:
-    """Build an Asgard endpoint backed by one request-scoped Alfred runtime."""
+    """Build Alfred's Asgard around one request-scoped Alfred runtime."""
     return AlfredAsgard(
         runtime=build_alfred_runtime()
     )
