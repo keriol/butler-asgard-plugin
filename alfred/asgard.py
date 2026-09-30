@@ -31,15 +31,22 @@ class AlfredAsgard:
 
     runtime: AlfredRuntime
     butler_name: str = "Alfred"
+    nicknames: tuple[str, ...] = ()
 
     @property
     def available(self) -> bool:
         return True
 
     def matches_butler_name(self, requested_name: str) -> bool:
-        return (
-            str(requested_name or "").strip().casefold()
-            == self.butler_name.casefold()
+        requested = str(requested_name or "").strip().casefold()
+        if not requested:
+            return False
+
+        accepted = (self.butler_name, *self.nicknames)
+        return any(
+            requested == str(name).strip().casefold()
+            for name in accepted
+            if str(name).strip()
         )
 
     def ask(self, message: str) -> dict[str, Any]:
