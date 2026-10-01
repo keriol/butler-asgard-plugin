@@ -8,10 +8,14 @@ from alfred.runtime import AlfredRuntime, build_alfred_runtime
 
 
 class Asgard(Protocol):
-    """Butler-owned identity and ingress boundary."""
+    """Butler-owned identity projection and ingress boundary."""
 
     @property
     def butler_name(self) -> str:
+        ...
+
+    @property
+    def nicknames(self) -> tuple[str, ...]:
         ...
 
     @property
@@ -27,34 +31,31 @@ class Asgard(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class AlfredAsgard:
-    """Alfred-owned Asgard identity and request boundary."""
+    """Alfred-owned Asgard projection and request boundary."""
 
     runtime: AlfredRuntime
-    butler_name: str = "Alfred"
-    nicknames: tuple[str, ...] = ()
+
+    @property
+    def butler_name(self) -> str:
+        return self.runtime.identity.canonical_name
+
+    @property
+    def nicknames(self) -> tuple[str, ...]:
+        return self.runtime.identity.aliases
 
     @property
     def available(self) -> bool:
         return True
 
     def matches_butler_name(self, requested_name: str) -> bool:
-        requested = str(requested_name or "").strip().casefold()
-        if not requested:
-            return False
-
-        accepted = (self.butler_name, *self.nicknames)
-        return any(
-            requested == str(name).strip().casefold()
-            for name in accepted
-            if str(name).strip()
-        )
+        return self.runtime.identity.matches(requested_name)
 
     def ask(self, message: str) -> dict[str, Any]:
         with active_butler(self.runtime):
             result = self.runtime.core.ask(message)
 
         response = dict(result)
-        response["source_butler_name"] = self.butler_name
+        response["source_butler_name"] = self.runtime.identity.canonical_name
         return response
 
 
