@@ -5,6 +5,10 @@ from typing import Any, Protocol
 
 from alfred.butler_context import active_butler
 from alfred.runtime import AlfredRuntime, build_alfred_runtime
+from config import ALFRED_VERSION
+
+
+ASGARD_VERSION = "alfred-internal"
 
 
 class Asgard(Protocol):
@@ -20,6 +24,18 @@ class Asgard(Protocol):
 
     @property
     def available(self) -> bool:
+        ...
+
+    @property
+    def description(self) -> str:
+        ...
+
+    @property
+    def version(self) -> str:
+        ...
+
+    @property
+    def asgard_version(self) -> str:
         ...
 
     def matches_butler_name(self, requested_name: str) -> bool:
@@ -46,6 +62,18 @@ class AlfredAsgard:
     @property
     def available(self) -> bool:
         return True
+
+    @property
+    def description(self) -> str:
+        return self.runtime.identity.description
+
+    @property
+    def version(self) -> str:
+        return ALFRED_VERSION
+
+    @property
+    def asgard_version(self) -> str:
+        return ASGARD_VERSION
 
     def matches_butler_name(self, requested_name: str) -> bool:
         return self.runtime.identity.matches(requested_name)
