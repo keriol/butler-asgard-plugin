@@ -9,7 +9,7 @@ from alfred.runtime import AlfredRuntime, build_alfred_runtime
 from config import ALFRED_VERSION
 
 
-ASGARD_VERSION = "alfred-internal"
+ASGARD_VERSION = "0.1.0"
 
 
 class Asgard(Protocol):
