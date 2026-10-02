@@ -19,6 +19,7 @@ def test_alfred_runtime_owns_identity_and_asgard_projects_it():
     identity = ButlerIdentity(
         canonical_name="Test Butler",
         aliases=("Tester",),
+        profile_picture="assets/test-profile.png",
     )
     runtime = _runtime(
         lambda _message: {"response": "ok"},
@@ -29,7 +30,12 @@ def test_alfred_runtime_owns_identity_and_asgard_projects_it():
     assert runtime.identity is identity
     assert asgard.butler_name == "Test Butler"
     assert asgard.nicknames == ("Tester",)
+    assert asgard.profile_picture == "assets/test-profile.png"
     assert asgard.available is True
+
+
+def test_alfred_identity_owns_canonical_profile_picture():
+    assert ALFRED_IDENTITY.profile_picture == "alfred/assets/profile.png"
 
 
 def test_asgard_matches_runtime_canonical_name_and_aliases():
@@ -58,6 +64,7 @@ def test_asgard_has_no_independent_identity_configuration():
 
     assert asgard.butler_name == "Runtime-Owned"
     assert asgard.nicknames == ("Runtime-Alias",)
+    assert asgard.profile_picture is None
     assert asgard.matches_butler_name("Runtime-Alias") is True
 
 

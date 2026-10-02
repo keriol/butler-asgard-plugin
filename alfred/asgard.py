@@ -24,6 +24,10 @@ class Asgard(Protocol):
         ...
 
     @property
+    def profile_picture(self) -> str | None:
+        ...
+
+    @property
     def available(self) -> bool:
         ...
 
@@ -59,6 +63,10 @@ class AlfredAsgard:
     @property
     def nicknames(self) -> tuple[str, ...]:
         return self.runtime.identity.aliases
+
+    @property
+    def profile_picture(self) -> str | None:
+        return self.runtime.identity.profile_picture
 
     @property
     def available(self) -> bool:
