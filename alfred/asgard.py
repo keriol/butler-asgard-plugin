@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Protocol
 
 from alfred.butler_context import active_butler
+from alfred.progress import ProgressHook
 from alfred.runtime import AlfredRuntime, build_alfred_runtime
 from config import ALFRED_VERSION
 
@@ -87,8 +88,13 @@ class AlfredAsgard:
         return response
 
 
-def build_alfred_asgard() -> AlfredAsgard:
+def build_alfred_asgard(
+    *,
+    progress_hook: ProgressHook | None = None,
+) -> AlfredAsgard:
     """Build Alfred's Asgard around one request-scoped Alfred runtime."""
     return AlfredAsgard(
-        runtime=build_alfred_runtime()
+        runtime=build_alfred_runtime(
+            progress_hook=progress_hook,
+        )
     )
