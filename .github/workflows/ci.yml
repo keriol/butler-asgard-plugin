@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           python -m venv "$RUNNER_TEMP/asgard-sdist-smoke"
-          "$RUNNER_TEMP/asgard-sdist-smoke/bin/python" -m pip install --no-deps --no-build-isolation dist/*.tar.gz
+          "$RUNNER_TEMP/asgard-sdist-smoke/bin/python" -m pip install --no-deps dist/*.tar.gz
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/asgard-sdist-smoke/bin/python" -c "from butler_asgard import AsgardBoundary, ButlerIdentity, RequestEnvelope; print('source install smoke: PASS')"
       - name: Verify isolated wheel installation
