@@ -8,10 +8,10 @@ Python **3.12+**. Build from a trusted private checkout or consume a versioned w
 
 ```sh
 python -m build --wheel --sdist
-python -m pip install --no-deps dist/butler_asgard-0.1.0.dev0-py3-none-any.whl
+python -m pip install --no-deps dist/butler_asgard-0.1.0-py3-none-any.whl
 ```
 
-This package is **not a published PyPI release**. Do not treat the development wheel as a stable release. Production use requires consumer-specific integration, review and verification; Alfred's private adoption is evidence for Alfred only.
+This package is **not necessarily published to PyPI**. A GitHub Public Alpha release, once verified, is not a PyPI distribution or a promise of stable APIs. Production use requires consumer-specific integration, review and verification; Alfred's private adoption of the earlier development revision is evidence for Alfred only.
 
 ## 2. Where to configure the name, aliases and image
 

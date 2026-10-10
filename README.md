@@ -4,7 +4,7 @@
 
 Asgard is the reusable, framework-neutral boundary where a concrete Butler exposes its identity and receives a request. A Butler supplies an immutable identity, an asynchronous request handler and an availability probe. Asgard provides exact alias matching, correlation and canonical source attribution.
 
-> **Status: private integration baseline (0.1.0.dev0).** Standalone package build, clean-install smoke test and neutral CI pass. Alfred's private production runtime has adopted this standalone package and a real Android Interphone request/reply was observed. A second Wilfred-based Butler and image projection are **not yet proven**. No public release has been made.
+> **Version 0.1.0: Public Alpha release candidate.** Standalone wheel/sdist, clean-install smoke tests and CI are verified. Alfred's private runtime has adopted the earlier 0.1.0.dev0 development package and an Android Interphone request/reply was observed. A second Wilfred-based Butler, image projection and a publicly published GitHub release are **not yet verified**.
 
 ```text
 External client -> Bifröst (transport) -> Midgard (select a Butler)
@@ -53,7 +53,7 @@ The picture here is a **Butler-owned reference only**. The present Asgard packag
 - **[Architecture & boundaries](docs/ARCHITECTURE.md)**: precise ownership, lifecycle, security, error and transport rules.
 - **[Publication readiness](docs/PUBLICATION.md)**: maturity, public extraction criteria, unresolved work and release gates.
 - [Request and speaker context](docs/REQUEST_CONTEXT.md): optional context fields and ownership.
-- [History provenance](docs/PROVENANCE.md): private-only Git history mappings. **Never copy this historical document into a public repo without review.**
+- [Release scope](docs/RELEASE_0.1.0.md): intended Public Alpha contract, supported interfaces, verification and exclusions.
 
 ## What is available now
 
@@ -62,7 +62,7 @@ The picture here is a **Butler-owned reference only**. The present Asgard packag
 - An independently instantiated `AsgardBoundary(identity, ingress, availability)`.
 - Async `handle(RequestEnvelope)` producing `ResponseEnvelope` with original request ID and canonical source name.
 - Optional target name and speaker context in `RequestEnvelope`; speaker metadata is not an authorization credential.
-- Wheel/sdist build and isolated-wheel smoke testing on Python 3.12 / 3.13.
+- Wheel/sdist build, audited archive contents and clean wheel/sdist installation on Python 3.12 / 3.13.
 
 ## What Asgard does not do
 
@@ -79,4 +79,4 @@ python examples/basic_butler.py
 
 Use the canonical environment of your consumer; installing a wheel is not runtime activation. Do not install or change a running Alfred/HA service as part of documentation proving.
 
-License: Apache-2.0. This repository is currently private, with publication gated by ASG-005. Documentation is drafted for a future publication decision, **not** authorization to make history or private implementation public.
+License: Apache-2.0. The 0.1.0 source checkpoint is distinct from GitHub repository visibility, a signed tag, published release and verified assets; those must be checked separately.

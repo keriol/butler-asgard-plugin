@@ -1,6 +1,7 @@
 """Keep the documented example executable and free from private dependencies."""
 
 import subprocess
+import tomllib
 import sys
 from pathlib import Path
 
@@ -28,7 +29,17 @@ def test_documented_paths_and_publication_warning_present():
     assert "assets/profile.png" in integration
     assert "WILFRED_NAME" in integration
     assert "Midgard" in architecture
-    assert "NOT RELEASED" in publication
+    assert "RELEASE CANDIDATE" in publication
     assert "Privately proven" in architecture
     assert "It does not yet consume the standalone package" not in integration
     assert "production Alfred does not yet depend" not in publication
+
+
+def test_public_alpha_version_and_scope_documented():
+    root = Path(__file__).resolve().parents[1]
+    metadata = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+    assert metadata["project"]["name"] == "butler-asgard"
+    assert metadata["project"]["version"] == "0.1.0"
+    release_scope = (root / "docs/RELEASE_0.1.0.md").read_text(encoding="utf-8")
+    assert "0.1.0 Public Alpha" in release_scope
+    assert "Deliberately out of scope" in release_scope
