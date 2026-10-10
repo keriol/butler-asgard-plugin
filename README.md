@@ -6,6 +6,16 @@ Each concrete Butler owns its identity (canonical name, aliases, description, op
 
 This first package is a contract/proving baseline, not a deployed Alfred/Wilfred consumer and not a released artifact. It does not implement runtime activation, authorization, transport, image-file loading, or client manifest serialization. The host must enforce runtime activation, policy, permissions, confirmation and request authentication. It must validate and convert optional image assets into client-safe metadata before publishing them.
 
-The original Alfred history is retained in `alfred/asgard.py` and `tests/test_alf_185_asgard_boundary.py` for provenance; those historical files are not installed as part of this package.
+The historical Alfred code and tests remain reachable in the imported Git history, but are deliberately removed from the current package and test collection. See `docs/PROVENANCE.md` for the original-to-filtered commit mapping.
 
-See `docs/PROVENANCE.md` for the original-to-filtered commit mapping.
+## Development
+
+On Python 3.12+:
+
+```sh
+python -m pip install -e '.[dev]'
+python -m pytest -q
+python -m build --wheel --sdist
+```
+
+CI also installs the wheel into a fresh virtual environment and smoke-tests the installed distribution.

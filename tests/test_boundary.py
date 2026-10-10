@@ -1,4 +1,5 @@
 import asyncio
+from dataclasses import FrozenInstanceError
 
 import pytest
 
@@ -11,6 +12,7 @@ def test_identity_normalizes_without_fuzzy_matching():
     assert identity.matches("alfrè")
     assert not identity.matches("Alfredo")
     assert not identity.matches("")
+    assert not identity.matches(None)
 
 
 def test_reject_duplicate_and_blank_identity():
@@ -40,20 +42,42 @@ def test_per_instance_identity_and_canonical_response():
 
 def test_unavailable_never_executes():
     calls = []
+
     async def executor(request):
         calls.append(request)
         return "should not execute"
+
     boundary = AsgardBoundary(ButlerIdentity("Wilfred"), executor, lambda: False)
     with pytest.raises(RuntimeError):
-        asyncio.run(boundary.handle(RequestEnvelope("x", "hello"))
+        asyncio.run(boundary.handle(RequestEnvelope("x", "hello")))
     assert calls == []
 
 
 def test_ingress_cannot_forge_source_identity():
     async def ingress(_request):
         return "reply"
+
     identity = ButlerIdentity("Manfred", profile_picture="assets/manfred.png")
     boundary = AsgardBoundary(identity, ingress, lambda: True)
     assert boundary.identity.profile_picture == "assets/manfred.png"
     response = asyncio.run(boundary.handle(RequestEnvelope("req", "go")))
     assert response.source_butler_name == "Manfred"
+
+
+def test_immutable_identity_and_envelope_validation():
+    identity = ButlerIdentity("Wilfred")
+    with pytest.raises(FrozenInstanceError):
+        identity.canonical_name = "Manfred"
+    with pytest.raises(ValueError):
+        RequestEnvelope("", "hello")
+    with pytest.raises(ValueError):
+        RequestEnvelope("req", "  ")
+
+
+def test_invalid_executor_result_fails_closed():
+    async def ingress(_request):
+        return {"response": "ok", "source_butler_name": "forged"}
+
+    boundary = AsgardBoundary(ButlerIdentity("Alfred"), ingress, lambda: True)
+    with pytest.raises(TypeError):
+        asyncio.run(boundary.handle(RequestEnvelope("req", "hello")))
