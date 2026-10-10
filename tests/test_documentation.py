@@ -29,3 +29,6 @@ def test_documented_paths_and_publication_warning_present():
     assert "WILFRED_NAME" in integration
     assert "Midgard" in architecture
     assert "NOT RELEASED" in publication
+    assert "Privately proven" in architecture
+    assert "It does not yet consume the standalone package" not in integration
+    assert "production Alfred does not yet depend" not in publication

@@ -8,7 +8,10 @@ This is historical import, not standalone packaging or public-safety certificati
 - Alfred origin/main snapshot: `67d5ae5a80c8dcdd96c382ca7b157eb0646a7a0e`
 - Filtered history HEAD: `a5493b174c92566e995f97eb9c6700720cb51632`
 - Historical paths: `alfred/asgard.py`, `tests/test_alf_185_asgard_boundary.py`
-- Tracking: https://github.com/keriol/asgard-butler-plugin/issues/1
+- Tracking: https://github.com/keriol/butler-asgard-plugin/issues/1
+Publication safety: https://github.com/keriol/butler-asgard-plugin/issues/16
+
+**Private audit record.** This mapping is not approved for publication. Updating or deleting the present file does not erase already reachable historical commits or PR refs.
 
 | Original Alfred SHA | Rewritten Asgard SHA |
 | --- | --- |

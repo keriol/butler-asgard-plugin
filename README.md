@@ -1,10 +1,10 @@
-# Butler Asgard 🎩
+# Butler Asgard Plugin 🎩
 
 **One Butler-owned ingress boundary. Many independently named Butlers.**
 
 Asgard is the reusable, framework-neutral boundary where a concrete Butler exposes its identity and receives a request. A Butler supplies an immutable identity, an asynchronous request handler and an availability probe. Asgard provides exact alias matching, correlation and canonical source attribution.
 
-> **Status: private integration baseline (0.1.0.dev0).** Standalone package build, clean-install smoke test and neutral CI pass. Production adoption by Alfred and a second Wilfred-based Butler, image delivery and Midgard adapter are **not yet proven**. No public release has been made.
+> **Status: private integration baseline (0.1.0.dev0).** Standalone package build, clean-install smoke test and neutral CI pass. Alfred's private production runtime has adopted this standalone package and a real Android Interphone request/reply was observed. A second Wilfred-based Butler and image projection are **not yet proven**. No public release has been made.
 
 ```text
 External client -> Bifröst (transport) -> Midgard (select a Butler)
@@ -79,4 +79,4 @@ python examples/basic_butler.py
 
 Use the canonical environment of your consumer; installing a wheel is not runtime activation. Do not install or change a running Alfred/HA service as part of documentation proving.
 
-License: Apache-2.0. This repository is currently private. Documentation is drafted for a future publication decision, **not** authorization to make history or private implementation public.
+License: Apache-2.0. This repository is currently private, with publication gated by ASG-005. Documentation is drafted for a future publication decision, **not** authorization to make history or private implementation public.
