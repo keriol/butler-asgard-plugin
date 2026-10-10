@@ -30,6 +30,15 @@ jobs:
         run: python -m pytest -q
       - name: Build wheel and source archive
         run: python -m build --wheel --sdist --no-isolation
+      - name: Audit wheel and source archive contents
+        run: python scripts/audit_dist.py dist
+      - name: Verify isolated source archive installation
+        shell: bash
+        run: |
+          python -m venv "$RUNNER_TEMP/asgard-sdist-smoke"
+          "$RUNNER_TEMP/asgard-sdist-smoke/bin/python" -m pip install --no-deps dist/*.tar.gz
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/asgard-sdist-smoke/bin/python" -c "from butler_asgard import AsgardBoundary, ButlerIdentity, RequestEnvelope; print('source install smoke: PASS')"
       - name: Verify isolated wheel installation
         shell: bash
         run: |
