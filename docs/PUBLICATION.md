@@ -1,4 +1,4 @@
-# Butler Asgard: future publication draft and gate 🎩
+# Butler Asgard Plugin: publication draft and gate 🎩
 
 > **NOT RELEASED · PRIVATE-FIRST · RELEASE CANDIDATE DOCUMENTATION ONLY**
 >
@@ -45,20 +45,20 @@ For working, dependency-free code see [`examples/basic_butler.py`](../examples/b
 
 **Available** in the private development baseline: installable pure-Python wheel, isolated CI, neutral request/response envelopes, alias matching, canonical source identity and injected availability/async execution.
 
-**In testing / integration work:** typed Midgard adapter and real consumer migration.
+**Privately proven:** Alfred's host-owned Midgard adapter and first real standalone Asgard consumer, with green CI, healthy deployment and an Android Interphone request/reply on 2026-10-10. This does not certify the second Butler consumer or new physical-action verification.
 
 **Designed to enable, not yet implemented:** built-in image projection to manifests, polished multi-Butler installation recipes, public distribution/release.
 
-There is **no public Asgard release yet**, and production Alfred does not yet depend on this standalone package.
+There is **no public Asgard release yet**. Production Alfred uses a pinned private standalone development package; historical IGNITION-001 shipped Alfred-owned internal Asgard instead.
 
 ## Publication checklist: every item is a real gate
 
-- [ ] ASG-001 and ASG-003 consumer proof; Midgard error/correlation behavior exercised with real instances.
+- [x] First real Alfred consumer proved via CI, server deployment and Android response (ALF-222); additional Midgard error/correlation and multiple-instance proving remain separate work.
 - [ ] ASG-002/MID-009/BIF-015/ALF-217 picture projection implemented or clearly omitted from the initial public release.
 - [ ] Configuration examples match actual Wilfred/Alfred public contracts; examples tested under clean install.
 - [ ] Public API, Python versions, changelog, compatibility promises and license reviewed.
 - [ ] Audited **entire Git history**, not just `main`: author metadata, blobs, commits, old names, assets, diffs, commit messages, credentials, private runtime details and external endpoints.
-- [ ] Public extraction uses a new sanitized history when necessary. **Never flip this private provenance repo public by default.**
+- [ ] ASG-005: resolve historical private Git objects, platform PR refs and issue disclosures safely in the **same repository**, including dependent consumers. **Never flip the current provenance repository public by default.**
 - [ ] CI on intended public tree succeeds; build wheel+sdist, clean install, smoke, package contents, permissions and license verified.
 - [ ] No private acquisition code, personal settings or unrelated runtime behavior present anywhere in publishable history.
 - [ ] Explicit GitHub release membership, annotated tag and verified release assets before announcing a version.
