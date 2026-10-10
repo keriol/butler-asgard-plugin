@@ -1,0 +1,59 @@
+name: Asgard CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: tests and clean install (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install build/test tools
+        run: python -m pip install "pytest>=9,<10" "build>=1,<2" "wheel>=0.45" "setuptools>=68"
+      - name: Install Asgard standalone
+        run: python -m pip install --no-deps .
+      - name: Run neutral tests
+        run: python -m pytest -q
+      - name: Build wheel and source archive
+        run: python -m build --wheel --sdist --no-isolation
+      - name: Verify isolated wheel installation
+        shell: bash
+        run: |
+          python -m venv "$RUNNER_TEMP/asgard-smoke"
+          "$RUNNER_TEMP/asgard-smoke/bin/python" -m pip install --no-index --no-deps --find-links dist butler-asgard
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/asgard-smoke/bin/python" - <<'PY'
+          import asyncio
+          from butler_asgard import AsgardBoundary, ButlerIdentity, RequestEnvelope
+
+          async def echo(request):
+              return request.message
+
+          async def smoke():
+              boundary = AsgardBoundary(
+                  ButlerIdentity("Wilfred", ("Willy",)),
+                  echo,
+                  lambda: True,
+              )
+              assert boundary.matches_butler_name(" willy ")
+              result = await boundary.handle(RequestEnvelope("smoke-1", "hello"))
+              assert (result.request_id, result.response, result.source_butler_name) == (
+                  "smoke-1", "hello", "Wilfred"
+              )
+
+          asyncio.run(smoke())
+          PY
