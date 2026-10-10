@@ -39,15 +39,43 @@ class ButlerIdentity:
 
 
 @dataclass(frozen=True, slots=True)
+class SpeakerEnvelope:
+    """Caller-supplied speaking context, not authorization evidence."""
+
+    speaker_id: str
+    persistent: bool = False
+    call_me: str | None = None
+    language: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.speaker_id, str) or not self.speaker_id.strip():
+            raise ValueError("speaker_id must not be blank")
+        if not isinstance(self.persistent, bool):
+            raise TypeError("persistent must be boolean")
+        for field_name in ("call_me", "language"):
+            value = getattr(self, field_name)
+            if value is not None and not isinstance(value, str):
+                raise TypeError(f"{field_name} must be a string or None")
+
+
+@dataclass(frozen=True, slots=True)
 class RequestEnvelope:
     request_id: str
     message: str
+    target_butler_name: str | None = None
+    speaker: SpeakerEnvelope | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.request_id, str) or not self.request_id.strip():
             raise ValueError("request_id must not be blank")
         if not isinstance(self.message, str) or not self.message.strip():
             raise ValueError("message must not be blank")
+        if self.target_butler_name is not None and (
+            not isinstance(self.target_butler_name, str) or not self.target_butler_name.strip()
+        ):
+            raise ValueError("target_butler_name must be nonblank or None")
+        if self.speaker is not None and not isinstance(self.speaker, SpeakerEnvelope):
+            raise TypeError("speaker must be SpeakerEnvelope or None")
 
 
 @dataclass(frozen=True, slots=True)
