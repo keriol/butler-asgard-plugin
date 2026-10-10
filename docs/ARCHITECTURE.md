@@ -74,9 +74,9 @@ Asgard does not import Midgard, Bifröst, FastAPI, Wilfred or Alfred. Midgard do
 | Package, typed contracts, alias matching, local unavailability | **Available in private baseline** | Standalone tests + Python 3.12/3.13 wheel CI |
 | Optional speaker/target context preserved to injected executor | **Available in private baseline** | `tests/test_context.py` |
 | Butler-isolated instance identity | **Available as Asgard contract** | `tests/test_ownership_contract.py` |
-| Real Alfred consumer migration | **Not implemented** | ASG-001 / MID-005 |
+| Real Alfred consumer migration | **Privately proven** | ALF-222: CI, server deployment and Android request/reply |
 | Second Wilfred / Manfred consumer through Midgard | **Not implemented** | ALF-197 |
-| Host-side Midgard envelope adapter | **In testing / planned** | ASG-003 |
+| Host-side Midgard envelope adapter | **Privately proven for Alfred** | ALF-222; generic consumer integration remains tracked in ASG-003 |
 | Profile image data URI and manifest projection | **Designed to enable** | ASG-002, MID-009, BIF-015, ALF-217 |
 | Published public release | **Not published** | Explicit release + security review required |
 
