@@ -11,7 +11,7 @@ python -m build --wheel --sdist
 python -m pip install --no-deps dist/butler_asgard-0.1.0.dev0-py3-none-any.whl
 ```
 
-This package is **not a published PyPI release**. Do not treat the development wheel as a stable release, and do not install it in production until consumer integration tests pass.
+This package is **not a published PyPI release**. Do not treat the development wheel as a stable release. Production use requires consumer-specific integration, review and verification; Alfred's private adoption is evidence for Alfred only.
 
 ## 2. Where to configure the name, aliases and image
 
@@ -58,7 +58,7 @@ identity = ButlerIdentity(
 
 ### Alfred (current private implementation)
 
-Alfred currently owns its production identity in `alfred/identity.py` (constant `ALFRED_IDENTITY`) and already uses the private asset reference `alfred/assets/profile.png`. Its legacy `AlfredAsgard` projects that runtime identity. **It does not yet consume the standalone package in production.** Keep the current production implementation and its host-only tests until a dedicated consumer migration succeeds.
+Alfred retains authority for its own identity and compatibility ingress. On 2026-10-10 it adopted the pinned standalone Asgard package behind that compatibility boundary, with green CI, a healthy server deployment, and an Android Interphone request/reply observed. This private consumer proof does not certify other Butler instances or a public Asgard release.
 
 Do not copy Alfred configuration, assets, source code, personal aliases or private endpoints into a public Asgard distribution.
 
@@ -75,7 +75,7 @@ locale = "en"
 log_level = "INFO"
 ```
 
-**Important:** the existing Wilfred TOML parser currently **does not support** `aliases`, `description` or `profile_picture` keys. Passing the suggested Asgard host-TOML example directly to `wilfred --config` would fail validation. Until dedicated identity-configuration work is implemented, its composition layer must explicitly provide any extra fields when constructing Asgard's `ButlerIdentity`. Manfred is a *separate deployment of Wilfred*, not a product fork or separately versioned Butler library.
+**Current Wilfred `main`:** the identity parser supports `name`, `locale`, `aliases`, `description` and a validated relative `profile_picture` reference (WILF-076). The host configuration uses `name`, not the Asgard example's `canonical_name`, and Wilfred does not automatically instantiate or register Asgard. Manfred is a *separate deployment of Wilfred*, not a product fork or separately versioned Butler library. These development-line capabilities do not retroactively alter released Wilfred baselines.
 
 ## 3. Supply a governed executor
 
